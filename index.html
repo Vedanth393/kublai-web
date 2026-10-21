@@ -1,0 +1,1526 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kublai</title>
+<meta name="description" content="Kublai is an anonymous, 24-hour group chat for college students. Every midnight, a new room of strangers. Launching at Georgia Tech.">
+<meta name="theme-color" content="#11100E" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FAF7F1" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Kublai: Strangers today. Gone tomorrow.">
+<meta property="og:description" content="An anonymous, 24-hour group chat for college students. Launching at Georgia Tech.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23F1E2BC'/%3E%3Cstop offset='.5' stop-color='%23D6B97C'/%3E%3Cstop offset='1' stop-color='%23A8874B'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='%2311100E'/%3E%3Ctext x='32' y='46' text-anchor='middle' font-family='Arial Black,Arial' font-weight='900' font-size='40' fill='url(%23g)'%3EK%3C/text%3E%3C/svg%3E">
+
+<script>
+  /* Runs before paint: theme choice + JS flag, so there's no flash. */
+  (function () {
+    var d = document.documentElement;
+    d.classList.add('js');
+    try { var t = localStorage.getItem('kublai-theme'); if (t === 'light' || t === 'dark') d.setAttribute('data-theme', t); } catch (e) {}
+  })();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Inter:wght@200;300;400;500;600&family=Sora:wght@700&display=swap">
+
+<style>
+/* Layout: single centred column (1160px), one idea per section, phone mockups as the recurring visual. */
+:root {
+  /* Gilded — dark (default) */
+  --bg: #11100E;
+  --surface: #1B1916;
+  --raised: #25221E;
+  --accent-surface: #2B261C;
+  --divider: #2A2621;
+  --text: #F2EDE4;
+  --text-2: #A8A196;
+  --text-3: #7A7369;
+  --accent: #C9A96E;
+  --accent-fill: #C9A96E;
+  --on-accent: #15130F;
+  --online: #86B391;
+  --danger: #E58A80;
+  --bubble-in: #201E1A;
+  --bubble-out: #3A3123;
+  --bubble-out-text: #F5EEDF;
+  --nav-bg: rgba(17, 16, 14, .78);
+  --shadow-phone: 0 50px 100px -40px rgba(0, 0, 0, .8), 0 30px 60px -30px rgba(0, 0, 0, .6);
+  --glow: rgba(201, 169, 110, .35);
+
+  --gold-grad: linear-gradient(135deg, #F1E2BC 0%, #D6B97C 50%, #A8874B 100%);
+  --k-grad: var(--gold-grad);
+  --god-grad: linear-gradient(135deg, #D9C08E 0%, #F2E8D2 100%);
+  --kublai-grad: linear-gradient(135deg, #E2C688 0%, #A9813F 100%);
+  --plan-text: #15130F;
+  --plan-text-2: rgba(21, 19, 15, .68);
+  --plan-line: rgba(21, 19, 15, .14);
+
+  --sun: block;
+  --moon: none;
+
+  --f-ui: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-mark: "Sora", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --f-serif: "Instrument Serif", "Iowan Old Style", "Times New Roman", Georgia, serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --radius: 20px;
+  --wrap: 1160px;
+  --section: clamp(96px, 13vw, 176px);
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #FAF7F1; --surface: #FFFFFF; --raised: #F1ECE2; --accent-surface: #F6EDDB; --divider: #E8E1D4;
+    --text: #1C1915; --text-2: #6B6459; --text-3: #978F83;
+    --accent: #8A6A2F; --accent-fill: #C4A266; --on-accent: #15130F; --online: #4F8A5E; --danger: #B23A2E;
+    --bubble-in: #F1ECE2; --bubble-out: #EFE2C6; --bubble-out-text: #1C1915;
+    --nav-bg: rgba(250, 247, 241, .8);
+    --shadow-phone: 0 50px 100px -40px rgba(60, 45, 20, .35), 0 30px 60px -30px rgba(60, 45, 20, .25);
+    --glow: rgba(196, 162, 102, .45);
+    --k-grad: linear-gradient(135deg, #D6B97C 0%, #A8874B 55%, #8A6A2F 100%);
+    --sun: none; --moon: block;
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #FAF7F1; --surface: #FFFFFF; --raised: #F1ECE2; --accent-surface: #F6EDDB; --divider: #E8E1D4;
+  --text: #1C1915; --text-2: #6B6459; --text-3: #978F83;
+  --accent: #8A6A2F; --accent-fill: #C4A266; --on-accent: #15130F; --online: #4F8A5E; --danger: #B23A2E;
+  --bubble-in: #F1ECE2; --bubble-out: #EFE2C6; --bubble-out-text: #1C1915;
+  --nav-bg: rgba(250, 247, 241, .8);
+  --shadow-phone: 0 50px 100px -40px rgba(60, 45, 20, .35), 0 30px 60px -30px rgba(60, 45, 20, .25);
+  --glow: rgba(196, 162, 102, .45);
+  --k-grad: linear-gradient(135deg, #D6B97C 0%, #A8874B 55%, #8A6A2F 100%);
+  --sun: none; --moon: block;
+  color-scheme: light;
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 88px; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 400 17px/1.6 var(--f-ui);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  transition: background-color .5s var(--ease), color .5s var(--ease);
+}
+@supports (overflow: clip) { body { overflow-x: clip; } }
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+::selection { background: var(--accent-fill); color: var(--on-accent); }
+p { margin: 0; }
+h1, h2, h3, h4 { margin: 0; font-weight: 400; text-wrap: balance; }
+ul { margin: 0; padding: 0; list-style: none; }
+
+.wrap {
+  width: 100%;
+  max-width: calc(var(--wrap) + 64px);
+  margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (min-width: 768px) {
+  .wrap { padding-left: max(32px, env(safe-area-inset-left, 0px)); padding-right: max(32px, env(safe-area-inset-right, 0px)); }
+}
+section { padding-block: var(--section); position: relative; }
+
+/* ---------- Type ---------- */
+.label {
+  font: 500 11.5px/1.4 var(--f-mono);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.label.gold { color: var(--accent); }
+.display {
+  font-family: var(--f-serif);
+  font-size: clamp(3.4rem, 8.4vw, 7rem);
+  line-height: .94;
+  letter-spacing: -.02em;
+}
+.h2 {
+  font-family: var(--f-serif);
+  font-size: clamp(2.6rem, 5.6vw, 4.6rem);
+  line-height: 1;
+  letter-spacing: -.015em;
+}
+.h3 { font: 500 1.2rem/1.3 var(--f-ui); letter-spacing: -.01em; }
+.lede { font-size: clamp(1.06rem, 1.5vw, 1.22rem); line-height: 1.6; color: var(--text-2); max-width: 36em; }
+.body { color: var(--text-2); max-width: 34em; }
+em.gold { font-style: italic; color: var(--accent); }
+.serif-i { font-family: var(--f-serif); font-style: italic; }
+
+.section-head { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; max-width: 760px; margin-bottom: clamp(48px, 7vw, 88px); }
+
+/* ---------- Wordmark ---------- */
+.wordmark {
+  font: 700 22px/1 var(--f-mark);
+  letter-spacing: -.04em;
+  color: var(--text);
+  display: inline-flex;
+}
+.wordmark .k {
+  background: var(--k-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-right: .01em;
+}
+
+/* ---------- Buttons ---------- */
+.btns { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5em;
+  height: 50px; padding: 0 24px; border-radius: 999px;
+  font: 500 15px/1 var(--f-ui); letter-spacing: -.005em; white-space: nowrap;
+  transition: background-color .35s var(--ease), border-color .35s var(--ease), box-shadow .5s var(--ease), transform .35s var(--ease), color .35s var(--ease);
+}
+.btn .arr { display: inline-block; transition: transform .35s var(--ease); font-size: .95em; }
+.btn:hover .arr { transform: translate(2px, -2px); }
+.btn-gold { background: var(--accent-fill); color: var(--on-accent); }
+.btn-gold:hover { box-shadow: 0 14px 40px -14px var(--glow); transform: translateY(-1px); }
+.btn-line { border: 1px solid var(--divider); color: var(--text); }
+.btn-line:hover { background: var(--surface); border-color: var(--text-3); }
+.btn-sm { height: 38px; padding: 0 16px; font-size: 14px; }
+
+/* ---------- Nav ---------- */
+.nav {
+  position: fixed; inset: 0 0 auto; z-index: 50;
+  padding-top: env(safe-area-inset-top, 0px);
+  border-bottom: 1px solid transparent;
+  transition: background-color .5s var(--ease), border-color .5s var(--ease), backdrop-filter .5s var(--ease);
+}
+.nav.scrolled {
+  background: var(--nav-bg);
+  -webkit-backdrop-filter: saturate(140%) blur(18px);
+  backdrop-filter: saturate(140%) blur(18px);
+  border-bottom-color: var(--divider);
+}
+.nav .wrap { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 64px; gap: 16px; }
+.nav .wordmark { justify-self: start; }
+.nav-links { display: none; align-items: center; gap: 4px; font-size: 14px; color: var(--text-2); }
+.nav-links a { position: relative; padding: 8px 14px; border-radius: 999px; transition: color .3s var(--ease); }
+.nav-links a:hover, .nav-links a.on { color: var(--text); }
+.nav-links a::after {
+  content: ""; position: absolute; left: 50%; bottom: 1px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%;
+  background: var(--accent); opacity: 0; transform: scale(0); transition: opacity .4s var(--ease), transform .4s var(--ease);
+}
+.nav-links a.on::after { opacity: 1; transform: none; }
+.nav-right { justify-self: end; display: flex; align-items: center; gap: 6px; }
+.theme-toggle {
+  width: 38px; height: 38px; border-radius: 999px; display: grid; place-items: center; color: var(--text-2);
+  transition: color .3s var(--ease), background-color .3s var(--ease);
+}
+.theme-toggle:hover { color: var(--text); background: var(--surface); }
+.theme-toggle .i-sun { display: var(--sun); }
+.theme-toggle .i-moon { display: var(--moon); }
+@media (min-width: 960px) { .nav-links { display: flex; } }
+
+/* ---------- Reveal motion ---------- */
+.js [data-reveal],
+.js [data-stagger] > * {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  --dl: calc(var(--i, 0) * 90ms + var(--d, 0ms));
+  transition: opacity 1s var(--ease) var(--dl), transform 1.1s var(--ease) var(--dl),
+              translate .6s var(--ease), border-color .5s var(--ease), box-shadow .7s var(--ease);
+}
+.js [data-reveal].in,
+.js [data-stagger].in > * { opacity: 1; transform: none; }
+[data-stagger] > *:nth-child(2) { --i: 1; }
+[data-stagger] > *:nth-child(3) { --i: 2; }
+[data-stagger] > *:nth-child(4) { --i: 3; }
+[data-stagger] > *:nth-child(5) { --i: 4; }
+[data-stagger] > *:nth-child(6) { --i: 5; }
+[data-stagger] > *:nth-child(7) { --i: 6; }
+[data-stagger] > *:nth-child(8) { --i: 7; }
+
+/* ---------- Hero ---------- */
+.hero { --hero-top: clamp(96px, 15vh, 132px); padding-top: calc(var(--hero-top) + env(safe-area-inset-top, 0px)); overflow-x: clip; padding-bottom: clamp(80px, 10vw, 140px); }
+.hero-grid { display: grid; gap: 56px; align-items: center; }
+.hero-copy { display: grid; gap: 28px; min-width: 0; container-type: inline-size; }
+/* Capped by its own column: the longest line ("Gone tomorrow." ≈ 5.5em, and it can't wrap)
+   always fits beside the phone, whatever the window or the browser's default font size. */
+.hero .display { max-width: 9.5em; font-size: min(clamp(3.4rem, 8.4vw, 7rem), 17.4cqi); }
+.hero .lede { max-width: 30em; }
+@media (min-width: 960px) {
+  .hero-grid { grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); gap: 48px; }
+}
+
+.bar { height: 3px; border-radius: 3px; background: var(--divider); overflow: hidden; }
+.bar > i { display: block; height: 100%; width: 100%; background: var(--accent-fill); transform-origin: left center; transform: scaleX(var(--p, .5)); transition: transform 1s linear; border-radius: inherit; }
+
+/* Hero phone */
+.hero-phone { position: relative; display: flex; justify-content: center; min-width: 0; }
+.hero-phone::before {
+  content: ""; position: absolute; inset: 8% -6%; z-index: -1; border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 22%, transparent), transparent);
+  filter: blur(40px);
+}
+.hero-phone .phone { --pw: 312px; }
+/* Side by side, the phone sizes to the window's height so it never runs below the fold. */
+@media (min-width: 960px) {
+  .hero-phone .phone { --pw: min(312px, calc((100svh - var(--hero-top) - 40px) * 296 / 612)); }
+}
+
+/* ---------- Problem ---------- */
+.trio { display: grid; gap: 16px; }
+@media (min-width: 820px) { .trio { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.card {
+  background: var(--surface); border: 1px solid var(--divider); border-radius: var(--radius);
+  padding: 28px; min-width: 0;
+  transition: border-color .5s var(--ease), translate .6s var(--ease), background-color .5s var(--ease);
+}
+.card-hover:hover { border-color: color-mix(in srgb, var(--accent) 35%, var(--divider)); translate: 0 -3px; }
+.trio .card { display: grid; gap: 14px; align-content: start; }
+.trio .card .tag { font: 500 11px/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--danger); opacity: .9; }
+.closing-line { margin-top: clamp(56px, 8vw, 96px); font: italic 400 clamp(2rem, 4vw, 3.2rem)/1.05 var(--f-serif); color: var(--text-2); text-align: center; text-wrap: balance; }
+.closing-line strong { font-weight: 400; color: var(--text); }
+
+/* ---------- Phone ---------- */
+.phone {
+  --pw: 296px;
+  width: min(var(--pw), 100%); aspect-ratio: 296 / 612; max-width: 100%;
+  padding: calc(var(--pw) * .0304); border-radius: calc(var(--pw) * .169);
+  background: linear-gradient(150deg, #34302A 0%, #16140F 45%, #2A2621 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08), inset 0 0 0 2px rgba(0, 0, 0, .6), var(--shadow-phone);
+  position: relative; flex: none;
+}
+.phone-screen {
+  position: relative; height: 100%; border-radius: calc(var(--pw) * .1385); overflow: hidden;
+  background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.4;
+  isolation: isolate;
+}
+.island { position: absolute; top: 3.6cqw; left: 50%; width: 33.1cqw; height: 9.7cqw; margin-left: -16.55cqw; border-radius: 99px; background: #000; z-index: 5; }
+.statusbar {
+  position: absolute; inset: 0 0 auto; height: 16.5cqw; z-index: 4;
+  display: flex; align-items: center; justify-content: space-between; padding: 2.2cqw 10cqw 0 11.5cqw;
+  font: 600 4.86cqw/1 var(--f-ui); letter-spacing: -.01em; color: var(--text);
+}
+.statusbar .sb-icons { display: flex; gap: 1.8cqw; align-items: center; }
+.statusbar svg { height: 3.96cqw; width: auto; fill: currentColor; }
+.screen { position: relative; height: 100%; padding: 58px 18px 22px; display: flex; flex-direction: column; gap: 14px; }
+
+.screens { position: absolute; inset: 0; }
+.screens .screen { position: absolute; inset: 0; opacity: 0; transform: scale(.985); transition: opacity .7s var(--ease), transform .9s var(--ease); pointer-events: none; }
+.screens .screen.is-active { opacity: 1; transform: none; }
+
+/* phone UI atoms */
+.p-label { font: 500 9.5px/1.3 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--text-3); }
+.p-title { font: 400 27px/1.02 var(--f-serif); letter-spacing: -.01em; }
+.p-card { background: var(--surface); border: 1px solid var(--divider); border-radius: 18px; padding: 14px; }
+.p-btn {
+  display: flex; align-items: center; justify-content: center; gap: 6px; height: 42px; border-radius: 999px;
+  background: var(--accent-fill); color: var(--on-accent); font: 600 13px/1 var(--f-ui);
+}
+.p-pill { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 11px; border-radius: 999px; border: 1px solid var(--divider); font-size: 11.5px; color: var(--text-2); white-space: nowrap; }
+.p-pill.on { border-color: var(--accent); color: var(--text); background: var(--accent-surface); }
+.here { display: inline-flex; align-items: center; gap: 6px; font: 500 11px/1 var(--f-ui); color: var(--online); }
+.here::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--online); box-shadow: 0 0 0 3px color-mix(in srgb, var(--online) 22%, transparent); }
+.av { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--raised); font-size: 15px; line-height: 1; flex: none; }
+.av-stack { display: flex; }
+.av-stack .av { width: 26px; height: 26px; font-size: 13px; border: 2px solid var(--surface); margin-left: -7px; }
+.av-stack .av:first-child { margin-left: 0; }
+.p-wordmark { font: 700 15px/1 var(--f-mark); letter-spacing: -.04em; }
+.p-wordmark .k { background: var(--k-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.spacer { flex: 1; }
+
+/* ---------- App screens ----------
+   Simple sketches of the iOS app. Each screen is laid out at the iPhone's real size (402px wide)
+   and scaled to fit its phone, so it keeps its proportions at any size, and browser
+   minimum-font-size settings (applied before scaling) can't reflow it. */
+.phone-screen { container-type: inline-size; --k: .69; }
+.app {
+  position: absolute; top: 0; left: 0; right: auto; bottom: auto;
+  width: 402px; height: calc(100% / var(--k)); scale: var(--k); transform-origin: 0 0;
+  padding: 76px 28px 44px; display: flex; flex-direction: column; gap: 0; font-size: 16px; line-height: 1.35;
+}
+.app .p-wordmark { font-size: 28px; }
+.ic { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.ava { display: block; width: 40px; height: 40px; border-radius: 50%; flex: none; }
+.a-label { font: 500 11px/1.2 var(--f-mono); letter-spacing: .16em; text-transform: uppercase; color: var(--text-3); }
+.a-label.gold { color: var(--accent); }
+.a-title { font: 400 40px/1.05 var(--f-ui); letter-spacing: -.025em; }
+.a-card { background: var(--surface); border: 1px solid var(--divider); border-radius: 22px; padding: 20px; }
+.a-btn { display: flex; align-items: center; justify-content: center; gap: 8px; height: 56px; border-radius: 999px; background: var(--accent-fill); color: var(--on-accent); font: 600 17px/1 var(--f-ui); transition: opacity .5s var(--ease), transform .25s var(--ease); }
+.a-btn .ic { width: 18px; height: 18px; }
+.app .spacer { flex: 1; }
+.app .bar { height: 4px; }
+/* pop-in for things that appear once a screen shows */
+.js .pop { opacity: 0; transform: translateY(12px) scale(.96); transition: opacity .6s var(--ease), transform .7s var(--ease); }
+.js .screen.is-active .pop, .js .hero-phone.in .pop { opacity: 1; transform: none; }
+
+/* Hero: today's room, centred */
+.today { align-items: center; text-align: center; }
+.today .p-wordmark { font-size: 30px; }
+.today .bar { align-self: stretch; }
+.today .t-room { align-self: stretch; justify-items: center; }
+.today .t-row { flex-direction: column; gap: 14px; }
+.today .t-room .a-btn { justify-self: stretch; }
+
+.t-num { margin-top: 14px; font: 200 108px/.9 var(--f-ui); letter-spacing: .01em; font-variant-numeric: tabular-nums; }
+.today .bar { margin-top: 22px; }
+.t-room { margin-top: 32px; display: grid; gap: 20px; }
+.t-row { display: flex; align-items: center; justify-content: space-between; }
+.stack { display: flex; }
+.stack .ava { width: 44px; height: 44px; margin-left: -12px; box-shadow: 0 0 0 3px var(--surface); }
+.stack .ava:first-child { margin-left: 0; }
+.app .here { font-size: 14px; gap: 7px; }
+.app .here::before { width: 7px; height: 7px; }
+.js .stack .ava { opacity: 0; transform: scale(.4); transition: opacity .4s var(--ease), transform .6s cubic-bezier(.3, 1.6, .5, 1); transition-delay: calc(var(--i) * 120ms + 700ms); }
+.js .hero-phone.in .stack .ava { opacity: 1; transform: none; }
+
+/* 1 · Sign up */
+.signup .p-wordmark { margin-top: 60px; font-size: 44px; text-align: center; }
+.signup .a-label { margin-top: 10px; text-align: center; }
+.a-field { display: flex; align-items: center; height: 60px; margin-top: 52px; padding: 0 18px; border-radius: 16px; background: var(--surface); border: 1px solid var(--divider); font-size: 17px; }
+.a-field .ph { color: var(--text-3); }
+.a-field.typing .ph { display: none; }
+.a-field .suffix { margin-left: auto; color: var(--text-2); }
+.app .caret { height: 20px; }
+.signup .a-btn { margin-top: 14px; }
+.js .screen.is-active .signup-go { animation: press .5s var(--ease) 2.3s both; }
+@keyframes press { 40% { transform: scale(.95); } 100% { transform: none; } }
+.alias { display: flex; align-items: center; gap: 16px; margin-top: 34px; padding: 18px 20px; border-radius: 20px; border: 1px solid var(--accent); background: var(--accent-surface); font-size: 20px; }
+.alias .ava { width: 52px; height: 52px; }
+.js .screen.is-active .alias.pop { transition-delay: 2.7s; }
+
+/* 2 · Pick a mode */
+.choose .a-title { margin-top: 40px; }
+.modes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 36px; }
+.mode-c { display: grid; justify-items: center; gap: 18px; padding: 30px 0 24px; border-radius: 22px; background: var(--surface); border: 1.5px solid var(--divider); font-size: 18px; transition: border-color .5s var(--ease), background-color .5s var(--ease); }
+.dots { position: relative; width: 74px; height: 56px; }
+.dots i { position: absolute; width: 22px; height: 22px; border-radius: 50%; background: var(--text-3); }
+html:not(.js) .mode-c.pick, .js .screen.is-active .mode-c.pick { border-color: var(--accent); background: var(--accent-surface); }
+.js .screen.is-active .mode-c.pick { transition-delay: 1s; }
+.mode-c.pick .dots i.me { background: var(--accent); }
+.choose .a-btn { margin-top: 28px; }
+.js .choose .a-btn { opacity: .35; }
+.js .screen.is-active.choose .a-btn { opacity: 1; transition-delay: 1.4s; }
+.choose .note { margin-top: 16px; text-align: center; }
+
+/* 3 · Matched at midnight */
+.reveal .a-label { margin-top: 30px; }
+.reveal .a-title { margin-top: 10px; }
+.r-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 40px; }
+.r-tile { display: grid; place-items: center; aspect-ratio: 1; border-radius: 22px; background: var(--surface); border: 1px solid var(--divider); }
+.r-tile .ava { width: 64px; height: 64px; }
+.r-tile.you { border-color: var(--accent); background: var(--accent-surface); }
+.js .deal > * {
+  opacity: 0; transform: translate3d(0, 26px, 0) rotate(var(--r, -4deg)) scale(.94);
+  transition: opacity .6s var(--ease), transform .8s var(--ease);
+  transition-delay: calc(var(--i, 0) * 110ms + 200ms);
+}
+.js .screen.is-active .deal > * { opacity: 1; transform: none; }
+.deal > *:nth-child(2) { --i: 1; --r: 5deg; } .deal > *:nth-child(3) { --i: 2; --r: -3deg; }
+.deal > *:nth-child(4) { --i: 3; --r: 4deg; } .deal > *:nth-child(5) { --i: 4; --r: -5deg; }
+.deal > *:nth-child(6) { --i: 5; --r: 3deg; } .deal > *:nth-child(7) { --i: 6; --r: -2deg; }
+.deal > *:nth-child(8) { --i: 7; --r: 4deg; } .deal > *:nth-child(9) { --i: 8; --r: -3deg; }
+
+/* 4 · Gone at midnight: the chat dissolves, the shared number stays */
+.gone .t-row { margin-top: 8px; }
+.gone .bar { margin-top: 14px; }
+.gone .bar i { transform: scaleX(.06); }
+.js .gone .bar i { transform: scaleX(.3); transition: transform 0s; }
+.js .screen.is-active.gone .bar i { transform: scaleX(0); transition: transform 1.6s linear .15s; }
+.g-chat { position: relative; flex: 1; display: grid; align-content: start; gap: 12px; margin-top: 34px; }
+.g-chat .b { justify-self: start; max-width: 80%; padding: 13px 18px; border-radius: 22px; border-bottom-left-radius: 7px; background: var(--bubble-in); font-size: 17px; transition: opacity .45s var(--ease), filter .55s var(--ease), transform .45s var(--ease); }
+.g-chat .b.out { justify-self: end; background: var(--bubble-out); color: var(--bubble-out-text); border-radius: 22px; border-bottom-right-radius: 7px; }
+.js .g-chat .b { opacity: 0; transform: translateY(12px); }
+.js .screen.is-active .g-chat .b { opacity: 1; transform: none; transition-delay: calc(var(--i) * 200ms + 150ms); }
+.js .screen.is-active .g-chat .b.bye { opacity: 0; filter: blur(10px); transform: translateY(-8px); transition-delay: calc(var(--i) * 80ms + 1.8s); }
+.g-num { justify-self: center; display: inline-flex; align-items: center; gap: 10px; margin-top: 10px; padding: 10px 16px 10px 10px; border-radius: 99px; background: var(--surface); border: 1px solid var(--accent); font-size: 15px; }
+.g-num .ava { width: 30px; height: 30px; }
+.js .screen.is-active .g-num.pop { transition-delay: .9s; }
+.g-wrap { position: absolute; inset: 40% 0 auto; text-align: center; font: italic 400 46px/1 var(--f-serif); }
+.g-wrap span { display: block; margin-top: 14px; font: 500 11px/1.2 var(--f-mono); letter-spacing: .16em; text-transform: uppercase; font-style: normal; color: var(--text-3); }
+.js .g-wrap { opacity: 0; transform: translateY(10px); transition: opacity .5s var(--ease), transform .6s var(--ease); }
+.js .screen.is-active .g-wrap { opacity: 1; transform: none; transition-delay: 2.2s; }
+html:not(.js) .g-wrap { display: none; }
+
+/* Inside a room */
+.chat.app { padding: 66px 20px 0; }
+.c-head { display: flex; align-items: center; justify-content: space-between; padding: 6px 4px 14px; border-bottom: 1px solid var(--divider); margin: 0 -20px; padding-inline: 24px; }
+.c-head b { font: 500 20px/1.2 var(--f-ui); }
+.c-head .a-label { display: block; margin-top: 4px; font-size: 10px; }
+.chat-body {
+  flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;
+  padding-bottom: 10px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 50px);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 50px);
+  transition: opacity .6s var(--ease);
+}
+.chat-body.fading { opacity: 0; }
+.chat-body.no-anim * { transition: none !important; }
+.m { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .55s var(--ease); }
+.m > .mi { min-height: 0; overflow: hidden; }
+.m .msg { padding-top: 14px; transition: opacity .55s var(--ease) .08s, transform .6s var(--ease) .05s; }
+.js .m { grid-template-rows: 0fr; }
+.js .m .msg { opacity: 0; transform: translateY(10px); }
+.js .m.show { grid-template-rows: 1fr; }
+.js .m.show .msg { opacity: 1; transform: none; }
+html:not(.js) .m.typing { display: none; }
+.msg { display: flex; align-items: flex-end; gap: 10px; }
+.msg.out { justify-content: flex-end; }
+.msg .ava { width: 34px; height: 34px; }
+.msg .col { display: grid; gap: 5px; justify-items: start; max-width: 78%; }
+.who { padding-left: 6px; font: 500 12px/1 var(--f-ui); color: var(--text-3); }
+.bubble { padding: 12px 16px; border-radius: 22px; border-bottom-left-radius: 7px; background: var(--bubble-in); color: var(--text); font-size: 17px; line-height: 1.3; }
+.out .bubble { background: var(--bubble-out); color: var(--bubble-out-text); border-bottom-left-radius: 22px; border-bottom-right-radius: 7px; }
+.react {
+  margin: -10px 0 0 8px; position: relative; display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 10px; border-radius: 99px;
+  background: var(--raised); border: 2px solid var(--bg); font-size: 13px; color: var(--text-2);
+  transform: scale(0); opacity: 0; transition: transform .45s var(--ease), opacity .3s var(--ease);
+}
+html:not(.js) .react, .m.reacted .react { transform: scale(1); opacity: 1; }
+.pollc { display: grid; gap: 8px; width: 240px; padding: 14px; border-radius: 22px; border-bottom-left-radius: 7px; background: var(--bubble-in); }
+.pollc .q { margin: 0 2px 4px; font-size: 17px; }
+.opt { position: relative; display: flex; align-items: center; justify-content: space-between; height: 40px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--divider); overflow: hidden; isolation: isolate; font-size: 15px; }
+.opt::before { content: ""; position: absolute; inset: 0; z-index: -1; width: var(--w, 0%); background: color-mix(in srgb, var(--accent) 28%, transparent); transition: width 1.3s var(--ease); }
+.opt .pct { font: 400 13px/1 var(--f-mono); color: var(--text-2); font-variant-numeric: tabular-nums; }
+.gamec { display: flex; align-items: center; gap: 12px; padding: 12px 12px 12px 14px; border-radius: 22px; border-bottom-left-radius: 7px; background: var(--bubble-in); font: 600 16px/1 var(--f-ui); }
+.gamec .gi { font-size: 26px; }
+.gamec .go { margin-left: 18px; padding: 10px 18px; border-radius: 99px; background: var(--accent-fill); color: var(--on-accent); font-size: 14px; }
+.chat .typing-dots { display: inline-flex; gap: 5px; padding: 16px 18px; }
+.chat .typing-dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--text-3); }
+@media (prefers-reduced-motion: no-preference) {
+  .typing-dots i { animation: tdot 1.3s ease-in-out infinite; }
+  .typing-dots i:nth-child(2) { animation-delay: .18s; }
+  .typing-dots i:nth-child(3) { animation-delay: .36s; }
+}
+@keyframes tdot { 0%, 60%, 100% { opacity: .35; transform: none; } 30% { opacity: 1; transform: translateY(-3px); } }
+.a-composer { display: flex; align-items: center; gap: 10px; margin: 0 -20px; padding: 12px 20px 36px; border-top: 1px solid var(--divider); }
+.a-composer .in { flex: 1; display: flex; align-items: center; height: 48px; padding: 0 18px; border-radius: 99px; background: var(--surface); font-size: 16px; color: var(--text-3); }
+.a-composer .send { width: 48px; height: 48px; border-radius: 50%; background: var(--accent-fill); color: var(--on-accent); display: grid; place-items: center; }
+.a-composer .send .ic { width: 20px; height: 20px; }
+
+/* Premium */
+.prem { padding-top: 92px; align-items: stretch; }
+.pm-k { align-self: center; width: 78px; height: 78px; border-radius: 22px; background: #15130F; display: grid; place-items: center; box-shadow: 0 0 0 1px rgba(255, 255, 255, .06), 0 18px 50px -12px var(--glow); }
+.pm-k span { font: 700 46px/1 var(--f-mark); letter-spacing: -.04em; background: var(--gold-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.prem .a-label { margin-top: 26px; text-align: center; }
+.pm-title { margin-top: 8px; text-align: center; font: 400 46px/1 var(--f-serif); letter-spacing: -.01em; }
+.pm-plans { display: grid; gap: 12px; margin-top: 34px; }
+.pm-plan { position: relative; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 12px; padding: 18px 20px; border-radius: 20px; background: var(--surface); border: 1.5px solid var(--divider); overflow: hidden; isolation: isolate; }
+.pm-plan b { font: 500 19px/1.2 var(--f-ui); }
+.pm-plan small { grid-column: 1; font-size: 14px; color: var(--text-2); }
+.pm-plan .pp { grid-row: 1 / span 2; grid-column: 2; font: 500 18px/1 var(--f-ui); font-variant-numeric: tabular-nums; }
+.pm-plan.kb b, .pm-plan.kb .pp { background: var(--gold-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.pm-plan.kb::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(105deg, transparent 35%, color-mix(in srgb, var(--accent) 16%, transparent) 50%, transparent 65%); background-size: 250% 100%; background-position: 120% 0; }
+.pm-plan.on { border-color: var(--accent); background: var(--accent-surface); }
+@media (prefers-reduced-motion: no-preference) {
+  .js .biz-phone.in .pm-plan.gd { animation: pm-pick 6s var(--ease) 1s infinite; }
+  .js .biz-phone.in .pm-plan.kb { animation: pm-pick 6s var(--ease) 4s infinite; }
+  .js .biz-phone.in .pm-plan.kb::after { animation: pm-shine 3s ease-in-out 1.5s infinite; }
+  .js .pm-plan.on { border-color: var(--divider); background: var(--surface); }
+}
+@keyframes pm-pick { 0%, 50% { border-color: var(--accent); background-color: var(--accent-surface); } 58%, 92% { border-color: var(--divider); background-color: var(--surface); } 100% { border-color: var(--accent); background-color: var(--accent-surface); } }
+@keyframes pm-shine { 0% { background-position: 120% 0; } 60%, 100% { background-position: -20% 0; } }
+.pm-perks { display: grid; gap: 14px; margin-top: 30px; padding: 0 6px; font-size: 16px; color: var(--text-2); }
+.pm-perks li { display: flex; align-items: center; gap: 12px; }
+.pm-perks .ic { width: 18px; height: 18px; color: var(--accent); stroke-width: 2; }
+.prem .a-btn { margin-top: auto; }
+
+/* ---------- How it works ---------- */
+.how-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; }
+.step { display: grid; gap: 18px; padding-block: 48px; border-top: 1px solid var(--divider); }
+.step:first-child { border-top: 0; padding-top: 0; }
+.step .num { font: 500 12px/1 var(--f-mono); letter-spacing: .14em; color: var(--accent); }
+.step .h3 { font: 400 clamp(1.9rem, 3.2vw, 2.6rem)/1.05 var(--f-serif); letter-spacing: -.01em; max-width: 13em; }
+.step-media { display: flex; justify-content: center; padding-top: 18px; }
+.how-stage { display: none; }
+@media (min-width: 960px) {
+  .how-grid { grid-template-columns: minmax(0, 1fr) 360px; gap: 64px; }
+  .step { min-height: 74vh; align-content: center; border-top: 0; padding-block: 0; }
+  .step:first-child { min-height: 60vh; align-content: start; padding-top: 8vh; }
+  .js .step-media { display: none; }
+  .js .how-stage {
+    display: flex; flex-direction: column; align-items: center; gap: 28px;
+    position: sticky; top: max(88px, calc(50vh - 330px)); height: max-content; align-self: start;
+  }
+  .js .how-stage .phone { --pw: min(296px, calc((100svh - 160px) * 296 / 612));
+  }
+  .js .step > :not(.step-media) { transition: opacity .7s var(--ease); }
+  .js .step:not(.is-active) > :not(.step-media) { opacity: .28; }
+}
+.how-progress { display: flex; gap: 8px; }
+.how-progress i { width: 26px; height: 3px; border-radius: 3px; background: var(--divider); transition: background-color .5s var(--ease), width .6s var(--ease); }
+.how-progress i.on { background: var(--accent-fill); width: 44px; }
+
+.ticks { display: grid; gap: 10px; color: var(--text-2); font-size: 16px; }
+.ticks li { display: grid; grid-template-columns: 14px 1fr; gap: 10px; align-items: baseline; }
+.ticks li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); transform: translateY(-2px); }
+.bento .ticks { font-size: 15.5px; }
+
+/* ---------- Inside a room ---------- */
+.room-grid { display: grid; gap: 64px; align-items: center; }
+.room-copy { display: grid; gap: 26px; min-width: 0; }
+.specs { display: grid; border-top: 1px solid var(--divider); margin-top: 8px; }
+.specs li { display: grid; grid-template-columns: 9.5em 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--divider); color: var(--text-2); font-size: 15.5px; }
+.specs li .label { padding-top: 4px; }
+@media (max-width: 480px) { .specs li { grid-template-columns: 1fr; gap: 6px; } }
+.room-phone { display: flex; justify-content: center; }
+@media (min-width: 960px) { .room-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .room-phone { order: -1; } }
+
+
+/* ---------- Features (bento) ---------- */
+.bento { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+.bento .card { display: grid; gap: 26px; align-content: space-between; padding: 30px; overflow: hidden; }
+.bento .card:has(> .bridge-grid:only-child) { align-content: center; }
+.bento .card .txt { display: grid; gap: 10px; max-width: 30em; }
+.bento .card .txt p:not(.label) { color: var(--text-2); font-size: 15.5px; }
+/* The midnight match: a bigger hand once the card is wide, so it fills the card */
+@media (min-width: 960px) {
+  .match .fan .mc { width: 118px; height: 150px; margin-left: -6px; gap: 12px; }
+  .match .fan .mc:first-child { margin-left: 0; }
+  .match .fan .mc .ava { width: 56px; height: 56px; }
+  .match .fan .mc span { font-size: 13px; }
+}
+@media (min-width: 820px) {
+  .bento { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .span-4 { grid-column: span 4; } .span-3 { grid-column: span 3; } .span-2 { grid-column: span 2; }
+}
+/* mini visuals */
+.fan { display: flex; justify-content: center; padding: 8px 0 4px; }
+.deal-note { margin-top: -10px; text-align: center; font: 500 10.5px/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--text-3); }
+.fan .mc {
+  width: 100px; height: 128px; margin-left: -16px; border-radius: 16px; background: var(--raised); border: 1px solid var(--divider);
+  display: grid; justify-items: center; align-content: center; gap: 8px; font-size: 26px;
+  transform: rotate(var(--r)) translateY(var(--y, 0)); transition: transform .8s var(--ease), margin .8s var(--ease);
+  box-shadow: 0 16px 30px -18px rgba(0, 0, 0, .5);
+}
+.fan .mc:first-child { margin-left: 0; }
+.fan .mc span { max-width: 100%; padding: 0 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 500 12px/1.2 var(--f-ui); color: var(--text-2); }
+.fan .mc:nth-child(1) { --r: -10deg; --y: 10px; } .fan .mc:nth-child(2) { --r: -5deg; --y: 2px; }
+.fan .mc:nth-child(3) { --r: 0deg; } .fan .mc:nth-child(4) { --r: 5deg; --y: 2px; } .fan .mc:nth-child(5) { --r: 10deg; --y: 10px; }
+.fan .mc .ava { width: 44px; height: 44px; }
+.fan .mc.gold { background: var(--accent-surface); border-color: color-mix(in srgb, var(--accent) 45%, var(--divider)); }
+.fan .mc.gold span { color: var(--accent); }
+@media (hover: hover) {
+  .card:hover .fan .mc { margin-left: 8px; transform: rotate(0deg); }
+  .card:hover .fan .mc:first-child { margin-left: 0; }
+}
+@media (max-width: 480px) { .bento .card { padding: 24px 20px; } .fan .mc { width: 66px; height: 88px; margin-left: -12px; } .fan .mc span { font-size: 10px; padding: 0 3px; } .fan .mc .ava { width: 32px; height: 32px; } }
+
+.games { display: grid; }
+.games li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--divider); font-size: 15px; }
+.games li:last-child { border-bottom: 0; }
+.games .g { display: flex; align-items: center; gap: 12px; }
+.games .ge { width: 32px; height: 32px; border-radius: 10px; background: var(--raised); display: grid; place-items: center; font-size: 16px; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { height: 30px; padding: 0 12px; border-radius: 99px; border: 1px solid var(--divider); display: inline-flex; align-items: center; font-size: 13px; color: var(--text-2); transition: border-color .3s var(--ease), color .3s var(--ease); }
+.chip:hover { border-color: var(--text-3); color: var(--text); }
+.voice { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 18px; background: var(--bubble-out); color: var(--bubble-out-text); width: max-content; max-width: 100%; border-bottom-right-radius: 6px; justify-self: end; }
+.voice .play { width: 0; height: 0; border-left: 9px solid currentColor; border-top: 6px solid transparent; border-bottom: 6px solid transparent; }
+.wave { display: flex; align-items: center; gap: 2.5px; height: 22px; }
+.wave i { width: 2.5px; border-radius: 2px; background: currentColor; opacity: .75; height: var(--h); }
+.voice .t { font: 500 11px/1 var(--f-mono); opacity: .7; }
+
+.bridge { display: grid; gap: 14px; background: var(--raised); border-radius: 18px; padding: 18px; max-width: 360px; width: 100%; justify-self: center; }
+.bridge .top { display: flex; align-items: center; gap: 12px; }
+.bridge .top b { font-weight: 500; display: block; }
+.bridge .top span { font-size: 13px; color: var(--text-2); }
+.bridge .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.bridge-grid { display: grid; gap: 26px; align-items: center; }
+@media (min-width: 1000px) { .bridge-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+
+.streak { display: flex; align-items: center; gap: 12px; padding-top: 14px; border-top: 1px solid var(--divider); }
+.streak b { font-weight: 500; }
+.week { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.week span { display: grid; justify-items: center; gap: 6px; font: 500 10px/1 var(--f-mono); letter-spacing: .1em; color: var(--text-3); }
+.week i { width: 100%; max-width: 44px; aspect-ratio: 1; border-radius: 12px; display: grid; place-items: center; font-style: normal; font-size: 15px; background: var(--raised); }
+.week .today i { background: var(--accent-surface); box-shadow: inset 0 0 0 1px var(--accent); }
+.week .today { color: var(--accent); }
+
+.notifs { display: grid; gap: 6px; }
+.notif { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding: 8px 13px; border-radius: 16px; background: var(--raised); font-size: 13.5px; }
+.notif .ic { width: 30px; height: 30px; border-radius: 8px; background: #15130F; display: grid; place-items: center; font: 700 15px/1 var(--f-mark); letter-spacing: -.04em; }
+.notif .ic span { background: var(--gold-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.notif .txt-n { min-width: 0; }
+.notif .txt-n b { display: block; font-weight: 600; font-size: 12.5px; }
+.notif .txt-n span { color: var(--text-2); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.notif .when { font-size: 11px; color: var(--text-3); align-self: start; }
+.notif:nth-child(2) { opacity: .85; } .notif:nth-child(3) { opacity: .65; }
+
+/* ---------- Safety ---------- */
+.safety-grid { display: grid; gap: 56px; }
+@media (min-width: 960px) { .safety-grid { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 80px; align-items: start; } .safety-grid .section-head { position: sticky; top: 120px; margin-bottom: 0; } }
+.rules { padding: 6px 28px; }
+.rules li { display: grid; grid-template-columns: 40px 1fr; gap: 18px; padding: 22px 0; border-bottom: 1px solid var(--divider); }
+.rules li:last-child { border-bottom: 0; }
+.rules .ico { width: 40px; height: 40px; border-radius: 12px; background: var(--accent-surface); color: var(--accent); display: grid; place-items: center; }
+.rules .ico svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.rules b { display: block; font-weight: 500; margin-bottom: 3px; }
+.rules p { color: var(--text-2); font-size: 15.5px; }
+@media (max-width: 480px) { .rules { padding: 2px 20px; } }
+
+/* ---------- Business ---------- */
+.biz-grid { display: grid; gap: 40px; align-items: center; }
+.plans { display: grid; gap: 16px; }
+@media (min-width: 720px) { .plans { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .biz-grid { grid-template-columns: 320px minmax(0, 1fr); gap: 56px; } }
+.biz-phone { display: flex; justify-content: center; }
+@media (max-width: 1099px) { .biz-phone { order: 2; } }
+.plan {
+  border-radius: 24px; padding: 30px; color: var(--plan-text); display: grid; gap: 22px; align-content: start; position: relative; overflow: hidden;
+  transition: translate .7s var(--ease), box-shadow .7s var(--ease);
+  box-shadow: 0 30px 60px -40px rgba(0, 0, 0, .6);
+}
+.plan:hover { translate: 0 -4px; box-shadow: 0 40px 70px -40px rgba(0, 0, 0, .7); }
+.plan.god { background: var(--god-grad); }
+.plan.kublai { background: var(--kublai-grad); }
+.plan::after { /* fine sheen */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, .28) 48%, transparent 62%);
+  transform: translateX(-120%); transition: transform 1.4s var(--ease);
+}
+.plan:hover::after { transform: translateX(120%); }
+.plan .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.plan .pname { font: 500 12px/1 var(--f-mono); letter-spacing: .16em; text-transform: uppercase; }
+.plan .badge { height: 26px; padding: 0 10px; border-radius: 99px; border: 1px solid var(--plan-line); font: 500 10px/24px var(--f-mono); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+.plan .price { display: flex; align-items: baseline; gap: 8px; }
+.plan .price b { font: 300 clamp(3rem, 5vw, 3.8rem)/1 var(--f-ui); letter-spacing: -.045em; font-variant-numeric: tabular-nums; }
+.plan .price span { color: var(--plan-text-2); font-size: 15px; }
+.plan .tagline { font: italic 400 1.35rem/1.2 var(--f-serif); }
+.plan ul { display: grid; border-top: 1px solid var(--plan-line); }
+.plan li { display: grid; grid-template-columns: 18px 1fr; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--plan-line); font-size: 14.5px; line-height: 1.45; }
+.plan li:last-child { border-bottom: 0; }
+.plan li svg { width: 14px; height: 14px; margin-top: 3px; fill: none; stroke: var(--plan-text); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; opacity: .75; }
+.plan .note { font-size: 13px; color: var(--plan-text-2); }
+.biz-foot { margin-top: 40px; display: grid; gap: 1px; background: var(--divider); border: 1px solid var(--divider); border-radius: var(--radius); overflow: hidden; }
+.biz-foot > div { background: var(--bg); padding: 22px 24px; display: grid; gap: 6px; }
+.biz-foot p { color: var(--text-2); font-size: 15px; }
+@media (min-width: 820px) { .biz-foot { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+/* Premium screen */
+
+/* ---------- Why now / GTM ---------- */
+.why { display: grid; gap: 1px; background: var(--divider); border-block: 1px solid var(--divider); }
+.why > div { background: var(--bg); padding: 32px 0; display: grid; gap: 12px; align-content: start; }
+.why p { color: var(--text-2); font-size: 15.5px; }
+.why .h3 { font: 400 1.9rem/1.05 var(--f-serif); letter-spacing: -.01em; }
+@media (min-width: 820px) { .why { grid-template-columns: repeat(3, minmax(0, 1fr)); } .why > div { padding: 36px 32px 40px; } .why > div:first-child { padding-left: 0; } .why > div:last-child { padding-right: 0; } }
+
+.whyus { margin-top: 24px; display: grid; gap: 14px; }
+@media (min-width: 820px) { .whyus { grid-template-columns: 220px 1fr; align-items: baseline; gap: 32px; } }
+
+.ph {
+  font: 500 .92em/1.2 var(--f-mono); letter-spacing: .02em; color: var(--accent);
+  background: var(--accent-surface); border: 1px dashed color-mix(in srgb, var(--accent) 55%, transparent);
+  border-radius: 8px; padding: .12em .45em; display: inline;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+.ph-block { display: inline; }
+
+.gtm { margin-top: clamp(80px, 10vw, 128px); }
+.gtm-head { display: grid; gap: 16px; margin-bottom: 48px; }
+.track { position: relative; display: grid; gap: 36px; }
+.track::before {
+  content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 1px; background: var(--divider);
+}
+.track .stop { position: relative; display: grid; gap: 10px; padding-left: 40px; }
+.track .stop::before {
+  content: ""; position: absolute; left: 0; top: 4px; width: 15px; height: 15px; border-radius: 50%;
+  background: var(--bg); border: 1.5px solid var(--text-3);
+}
+.track .stop.now::before { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 18%, transparent); }
+.track .stop p { color: var(--text-2); font-size: 15.5px; max-width: 26em; }
+.track .stop .h3 { font: 400 1.75rem/1.1 var(--f-serif); }
+.track .line-fill { display: none; }
+@media (min-width: 820px) {
+  .track { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
+  .track::before { left: 7px; right: 0; top: 7px; bottom: auto; width: auto; height: 1px; }
+  .track .line-fill {
+    display: block; position: absolute; left: 7px; top: 7px; height: 1px; width: calc(33.33% - 10px);
+    background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform 1.6s var(--ease) .3s;
+  }
+  .track.in .line-fill, html:not(.js) .track .line-fill { transform: scaleX(1); }
+  .track .stop { padding-left: 0; padding-top: 40px; }
+  .track .stop::before { top: 0; }
+}
+
+/* ---------- Team / raise ---------- */
+
+.tr-grid { display: grid; gap: 16px; }
+@media (min-width: 900px) { .tr-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.team { display: grid; gap: 4px; grid-template-rows: auto repeat(3, minmax(min-content, 1fr)); }
+.founder { display: grid; grid-template-columns: 52px 1fr; gap: 16px; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--divider); }
+.founder:last-child { border-bottom: 0; }
+.founder .pic { width: 52px; height: 52px; border-radius: 50%; border: 1px dashed color-mix(in srgb, var(--accent) 55%, transparent); background: var(--accent-surface); }
+.founder .who-f { display: grid; gap: 8px; justify-items: start; min-width: 0; }
+.raise { display: grid; gap: 22px; align-content: start; background: var(--accent-surface); border-color: color-mix(in srgb, var(--accent) 30%, var(--divider)); }
+.raise .big { font: 400 clamp(2.2rem, 4vw, 3.2rem)/1.08 var(--f-serif); letter-spacing: -.01em; }
+.raise .big .ph { font-size: .5em; vertical-align: middle; }
+.raise dl { margin: 0; display: grid; }
+.raise dl > div { display: grid; grid-template-columns: 8.5em 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid var(--divider); align-items: center; }
+.raise dt { font: 500 11px/1.3 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--text-3); }
+.raise dd { margin: 0; min-width: 0; }
+.raise dl > div:has(.miles) { align-items: start; }
+.miles { margin: 0; padding: 0; list-style: none; counter-reset: m; display: grid; gap: 8px; }
+.miles li { counter-increment: m; display: grid; grid-template-columns: 1.6em 1fr; }
+.miles li::before { content: counter(m); font: 500 11px/1.9 var(--f-mono); color: var(--accent); }
+.founder .pic.initials { border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--divider)); display: grid; place-items: center; font: 500 14px/1 var(--f-mono); letter-spacing: .06em; color: var(--accent); }
+.fname { font-weight: 500; font-size: 1.1rem; }
+.frole { color: var(--text-2); font-size: 15px; }
+.card-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 4px; }
+
+/* ---------- Contact ---------- */
+.contact { text-align: center; padding-bottom: clamp(110px, 14vw, 180px); }
+.contact .inner { display: grid; justify-items: center; gap: 28px; }
+.contact .display { font-size: clamp(3rem, 7.4vw, 6.2rem); max-width: 11em; }
+.contact .lede { margin-inline: auto; }
+.contact .btns { justify-content: center; }
+.addr { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 28px; color: var(--text-3); font-size: 14px; }
+.addr a { color: var(--text-2); border-bottom: 1px solid var(--divider); transition: color .3s var(--ease), border-color .3s var(--ease); }
+.addr a:hover { color: var(--text); border-color: var(--accent); }
+.mini-cd { display: inline-flex; align-items: center; gap: 12px; padding: 8px 16px 8px 14px; border-radius: 99px; background: var(--surface); border: 1px solid var(--divider); }
+.mini-cd b { font: 300 18px/1 var(--f-ui); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+
+/* ---------- Footer ---------- */
+footer { border-top: 1px solid var(--divider); padding-block: 36px calc(36px + env(safe-area-inset-bottom, 0px)); }
+footer .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; }
+footer .meta { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; transition-delay: 0ms !important; animation: none !important; }
+  .js [data-reveal], .js [data-stagger] > *, .js .deal > * { opacity: 1 !important; transform: none !important; }
+}
+</style>
+</head>
+
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-dash" viewBox="0 0 21 21"><path d="M8.84 1.91a8.6 8.6 0 0 1 3.32 0M12.16 19.09a8.6 8.6 0 0 1-3.32 0M15.41 3.26a8.6 8.6 0 0 1 2.35 2.36M1.91 12.16a8.6 8.6 0 0 1 0-3.32M17.74 15.41a8.6 8.6 0 0 1-2.36 2.35M19.09 8.84a8.6 8.6 0 0 1 0 3.32M3.26 5.59a8.6 8.6 0 0 1 2.36-2.35M5.59 17.74a8.6 8.6 0 0 1-2.35-2.36"/></symbol>
+  <symbol id="i-msg" viewBox="0 0 21 21"><path d="M2.7 15.32a1.8 1.8 0 0 0-.08-1.02A8.75 8.75 0 1 1 6.8 18.43a1.8 1.8 0 0 0-.96-.08l-2.99.87a.88.88 0 0 1-1.08-1.02l.93-2.88z"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 21 21"><path d="M8.75 4.38H2.63M10.5 16.63H2.63M12.25 2.63v3.5M14 14.88v3.5M18.38 10.5H10.5M18.38 16.63H14M18.38 4.38h-6.13M7 8.75v3.5M7 10.5H2.63"/></symbol>
+  <symbol id="i-crown" viewBox="0 0 21 21"><path d="M3.5 15.5h14M4 13l-1.5-7.5 4.5 3.5 3.5-5.5 3.5 5.5 4.5-3.5L17 13z"/></symbol>
+  <symbol id="i-users" viewBox="0 0 22 22"><path d="M14.67 19.25v-1.83a3.67 3.67 0 0 0-3.67-3.67H5.5a3.67 3.67 0 0 0-3.67 3.67v1.83M14.67 2.87a3.67 3.67 0 0 1 0 7.1M20.17 19.25v-1.83a3.67 3.67 0 0 0-2.75-3.55M11.92 6.42a3.67 3.67 0 1 1-7.34 0 3.67 3.67 0 0 1 7.34 0z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 22 22"><path d="M17.4 19.25v-1.83a3.67 3.67 0 0 0-3.67-3.67H8.27a3.67 3.67 0 0 0-3.67 3.67v1.83M14.67 6.42a3.67 3.67 0 1 1-7.34 0 3.67 3.67 0 0 1 7.34 0z"/></symbol>
+  <symbol id="i-dots" viewBox="0 0 22 22"><circle cx="11" cy="11" r=".92"/><circle cx="17.42" cy="11" r=".92"/><circle cx="4.58" cy="11" r=".92"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 22 22"><path d="M13.75 16.5 8.25 11l5.5-5.5"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 22 22"><path d="M4.58 11h12.84M11 4.58v12.84"/></symbol>
+  <symbol id="i-arr" viewBox="0 0 18 18"><path d="M12.75 12.75v-7.5h-7.5M12.75 5.25l-7.5 7.5"/></symbol>
+  <symbol id="i-go" viewBox="0 0 18 18"><path d="M3.75 9h10.5M9 14.25 14.25 9 9 3.75"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 14 14"><path d="M4.08 5.83V4.08a2.92 2.92 0 0 1 5.84 0v1.75M7.58 9.33a.58.58 0 1 1-1.16 0 .58.58 0 0 1 1.16 0zM2.92 5.83h8.16c.65 0 1.17.53 1.17 1.17v4.67c0 .64-.52 1.16-1.17 1.16H2.92c-.65 0-1.17-.52-1.17-1.16V7c0-.64.52-1.17 1.17-1.17z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 22 22"><circle cx="9.6" cy="9.6" r="6.6"/><path d="m14.5 14.5 5 5"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 22 22"><rect x="8" y="2.75" width="6" height="10" rx="3"/><path d="M4.6 10.5a6.4 6.4 0 0 0 12.8 0M11 17v2.5"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 22 22"><rect x="7.5" y="7.5" width="11" height="11" rx="2"/><path d="M14.5 7.5V5.5a2 2 0 0 0-2-2h-7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 20 20"><path d="m4.5 10.5 3.5 3.5 7.5-8"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></symbol>
+</svg>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a href="#top" class="wordmark" aria-label="Kublai, back to top"><span class="k">K</span>ublai</a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#how">Product</a>
+      <a href="#business">Business</a>
+      <a href="#why">Market</a>
+      <a href="#raise">Raise</a>
+    </nav>
+    <div class="nav-right">
+      <button class="theme-toggle" type="button" aria-label="Toggle colour theme">
+        <svg class="i-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+        <svg class="i-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>
+      </button>
+      <a href="#contact" class="btn btn-gold btn-sm">Get in touch <span class="arr" aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============ 1. HERO ============ -->
+<section class="hero" aria-labelledby="hero-title">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="label" data-reveal data-hero>An iOS app &nbsp;·&nbsp; Georgia Tech only</p>
+      <h1 class="display" id="hero-title" data-reveal data-hero style="--d:80ms">Strangers today. <em class="gold">Gone&nbsp;tomorrow.</em></h1>
+      <p class="lede" data-reveal data-hero style="--d:180ms">A new anonymous group chat with random students, every midnight. 24&nbsp;hours later, it’s gone.</p>
+      <div class="btns" data-reveal data-hero style="--d:260ms">
+        <a href="#contact" class="btn btn-gold">Get in touch <span class="arr" aria-hidden="true">↗</span></a>
+        <a href="#how" class="btn btn-line">See how it works</a>
+      </div>
+    </div>
+
+    <div class="hero-phone" data-reveal data-hero style="--d:200ms" aria-hidden="true">
+      <div class="phone"><div class="phone-screen">
+        <div class="island"></div>
+        <div class="statusbar"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 18 11"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" y="0" width="3" height="11" rx="1"/></svg><svg viewBox="0 0 25 11"><rect x=".5" y=".5" width="21" height="10" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="16" height="7" rx="1.6"/><rect x="22.6" y="3.6" width="1.6" height="3.8" rx=".8" opacity=".4"/></svg></span></div>
+        <div class="screen app today">
+  <span class="p-wordmark"><span class="k">K</span>ublai</span>
+  <div class="spacer"></div>
+  <p class="a-label">Today’s room</p>
+  <span class="t-num" data-cd-app>8:34</span>
+  <div class="bar"><i data-cd-bar></i></div>
+  <div class="a-card t-room">
+    <div class="t-row"><span class="stack"><img class="ava" src="avatars/sherlock.svg" alt="" style="--i:0"><img class="ava" src="avatars/wednesday.svg" alt="" style="--i:1"><img class="ava" src="avatars/nemo.svg" alt="" style="--i:2"><img class="ava" src="avatars/loki.svg" alt="" style="--i:3"><img class="ava" src="avatars/buzz.svg" alt="" style="--i:4"><img class="ava" src="avatars/maverick.svg" alt="" style="--i:5"></span><span class="here">4 here</span></div>
+    <div class="a-btn">Enter room <svg class="ic"><use href="#i-arr"/></svg></div>
+  </div>
+  <div class="spacer"></div>
+</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. PROBLEM ============ -->
+<section id="problem" aria-labelledby="problem-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="label" data-reveal>The problem</p>
+      <h2 class="h2" id="problem-title" data-reveal>Big campus. Small circles.</h2>
+      <p class="lede" data-reveal>Students find their people in the first few weeks. Then the circle closes.</p>
+    </div>
+
+    <div class="trio" data-stagger>
+      <div class="card card-hover">
+        <span class="tag">Permanent</span>
+        <h3 class="h3">Everything is on the record.</h3>
+      </div>
+      <div class="card card-hover">
+        <span class="tag">Performative</span>
+        <h3 class="h3">Feeds reward the highlight reel.</h3>
+      </div>
+      <div class="card card-hover">
+        <span class="tag">Built for dating</span>
+        <h3 class="h3">Apps for strangers are for dating.</h3>
+      </div>
+    </div>
+
+    <p class="closing-line" data-reveal>So most people just <strong>don’t.</strong></p>
+  </div>
+</section>
+
+<!-- ============ 3. HOW IT WORKS ============ -->
+<section id="how" aria-labelledby="how-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="label" data-reveal>How it works</p>
+      <h2 class="h2" id="how-title" data-reveal>Four steps. One day.</h2>
+    </div>
+
+    <div class="how-grid">
+      <ol class="steps" style="list-style:none;margin:0;padding:0">
+
+        <!-- Step 1 -->
+        <li class="step">
+          <span class="num" data-reveal>01</span>
+          <h3 class="h3" data-reveal>Sign up with your school email.</h3>
+          <ul class="ticks" data-stagger><li>@gatech.edu emails only</li><li>Random alias and avatar</li><li>Name and email stay hidden</li></ul>
+          <div class="step-media">
+            <div class="phone"><div class="phone-screen">
+              <div class="island"></div>
+              <div class="statusbar"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 18 11"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" y="0" width="3" height="11" rx="1"/></svg><svg viewBox="0 0 25 11"><rect x=".5" y=".5" width="21" height="10" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="16" height="7" rx="1.6"/><rect x="22.6" y="3.6" width="1.6" height="3.8" rx=".8" opacity=".4"/></svg></span></div>
+              <div class="screen app signup">
+  <span class="p-wordmark"><span class="k">K</span>ublai</span>
+  <p class="a-label gold">Georgia Tech only</p>
+  <div class="a-field"><span class="typed" data-type="gpburdell3"></span><i class="caret"></i><span class="ph">School email</span><span class="suffix">@gatech.edu</span></div>
+  <div class="a-btn signup-go">Continue <svg class="ic"><use href="#i-go"/></svg></div>
+  <div class="alias pop"><img class="ava" src="avatars/maverick.svg" alt=""><span>You’re <b style="font-weight:500">Maverick</b></span></div>
+</div>
+            </div></div>
+          </div>
+        </li>
+
+        <!-- Step 2 -->
+        <li class="step">
+          <span class="num" data-reveal>02</span>
+          <h3 class="h3" data-reveal>Pick a mode.</h3>
+          <ul class="ticks" data-stagger><li>Group: up to 10 people</li><li>Individual: one-on-one</li><li>Choose daily or set a default</li></ul>
+          <div class="step-media">
+            <div class="phone"><div class="phone-screen">
+              <div class="island"></div>
+              <div class="statusbar"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 18 11"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" y="0" width="3" height="11" rx="1"/></svg><svg viewBox="0 0 25 11"><rect x=".5" y=".5" width="21" height="10" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="16" height="7" rx="1.6"/><rect x="22.6" y="3.6" width="1.6" height="3.8" rx=".8" opacity=".4"/></svg></span></div>
+              <div class="screen app choose">
+  <span class="p-wordmark"><span class="k">K</span>ublai</span>
+  <p class="a-title">How do you want to meet today?</p>
+  <div class="modes">
+    <div class="mode-c pick"><span class="dots"><i style="left:0px;top:8px"></i><i style="left:26px;top:0px"></i><i style="left:52px;top:8px"></i><i style="left:13px;top:32px"></i><i class=me style="left:39px;top:32px"></i></span>Group</div>
+    <div class="mode-c"><span class="dots"><i style="left:14px;top:17px"></i><i class=me style="left:38px;top:17px"></i></span>1-on-1</div>
+  </div>
+  <div class="a-btn">Lock it in <svg class="ic"><use href="#i-go"/></svg></div>
+  <p class="a-label note">Until midnight</p>
+</div>
+            </div></div>
+          </div>
+        </li>
+
+        <!-- Step 3 -->
+        <li class="step">
+          <span class="num" data-reveal>03</span>
+          <h3 class="h3" data-reveal>Get matched at midnight.</h3>
+          <ul class="ticks" data-stagger><li>New room at 12:00&nbsp;AM</li><li>Random students from across campus</li></ul>
+          <div class="step-media">
+            <div class="phone"><div class="phone-screen">
+              <div class="island"></div>
+              <div class="statusbar"><span>12:00</span><span class="sb-icons"><svg viewBox="0 0 18 11"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" y="0" width="3" height="11" rx="1"/></svg><svg viewBox="0 0 25 11"><rect x=".5" y=".5" width="21" height="10" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="16" height="7" rx="1.6"/><rect x="22.6" y="3.6" width="1.6" height="3.8" rx=".8" opacity=".4"/></svg></span></div>
+              <div class="screen app reveal">
+  <p class="a-label gold">12:00 AM</p>
+  <p class="a-title">Meet today’s strangers.</p>
+  <div class="r-grid deal"><span class="r-tile"><img class="ava" src="avatars/sherlock.svg" alt=""></span><span class="r-tile"><img class="ava" src="avatars/wednesday.svg" alt=""></span><span class="r-tile"><img class="ava" src="avatars/nemo.svg" alt=""></span><span class="r-tile"><img class="ava" src="avatars/hulk.svg" alt=""></span><span class="r-tile you"><img class="ava" src="avatars/maverick.svg" alt=""></span><span class="r-tile"><img class="ava" src="avatars/loki.svg" alt=""></span><span class="r-tile"><img class="ava" src="avatars/dumbo.svg" alt=""></span><span class="r-tile"><img class="ava" src="avatars/barbie.svg" alt=""></span><span class="r-tile"><img class="ava" src="avatars/yoda.svg" alt=""></span></div>
+</div>
+            </div></div>
+          </div>
+        </li>
+
+        <!-- Step 4 -->
+        <li class="step">
+          <span class="num" data-reveal>04</span>
+          <h3 class="h3" data-reveal>Talk for 24 hours. Then it’s gone.</h3>
+          <ul class="ticks" data-stagger><li>Messages deleted at midnight</li><li>Clicked with someone? Send your number</li><li>2 a day, free</li></ul>
+          <div class="step-media">
+            <div class="phone"><div class="phone-screen">
+              <div class="island"></div>
+              <div class="statusbar"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 18 11"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" y="0" width="3" height="11" rx="1"/></svg><svg viewBox="0 0 25 11"><rect x=".5" y=".5" width="21" height="10" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="16" height="7" rx="1.6"/><rect x="22.6" y="3.6" width="1.6" height="3.8" rx=".8" opacity=".4"/></svg></span></div>
+              <div class="screen app gone">
+  <div class="t-row"><span class="a-label">Today’s room</span><span class="a-label gold">11:59 PM</span></div>
+  <div class="bar"><i></i></div>
+  <div class="g-chat">
+    <span class="b bye" style="--i:0">same room tomorrow?</span>
+    <span class="b out bye" style="--i:1">it’s random lol</span>
+    <span class="b bye" style="--i:2">then take my number</span>
+    <span class="g-num pop"><img class="ava" src="avatars/nemo.svg" alt="">Nemo’s number saved</span>
+    <p class="g-wrap">That’s a wrap.<span>New room at midnight</span></p>
+  </div>
+</div>
+            </div></div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="how-stage" aria-hidden="true">
+        <div class="phone"><div class="phone-screen">
+          <div class="island"></div>
+          <div class="statusbar"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 18 11"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" y="0" width="3" height="11" rx="1"/></svg><svg viewBox="0 0 25 11"><rect x=".5" y=".5" width="21" height="10" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="16" height="7" rx="1.6"/><rect x="22.6" y="3.6" width="1.6" height="3.8" rx=".8" opacity=".4"/></svg></span></div>
+          <div class="screens"></div>
+        </div></div>
+        <div class="how-progress"><i></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. INSIDE A ROOM ============ -->
+<section id="room" aria-labelledby="room-title">
+  <div class="wrap room-grid">
+    <div class="room-copy">
+      <p class="label" data-reveal>Inside a room</p>
+      <h2 class="h2" id="room-title" data-reveal>Different people. Same day.</h2>
+      <p class="lede" data-reveal>No permanent record, so people actually talk.</p>
+      <ul class="specs" data-stagger>
+        <li><span class="label">Daily drop</span><span>A prompt to break the ice</span></li>
+        <li><span class="label">Presence</span><span>Who’s here, who’s typing</span></li>
+        <li><span class="label">Polls &amp; games</span><span>Settle anything</span></li>
+      </ul>
+    </div>
+
+    <div class="room-phone" data-reveal>
+      <div class="phone"><div class="phone-screen">
+        <div class="island"></div>
+        <div class="statusbar"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 18 11"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" y="0" width="3" height="11" rx="1"/></svg><svg viewBox="0 0 25 11"><rect x=".5" y=".5" width="21" height="10" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="16" height="7" rx="1.6"/><rect x="22.6" y="3.6" width="1.6" height="3.8" rx=".8" opacity=".4"/></svg></span></div>
+        <div class="screen app chat" aria-label="Example chat in a Kublai room">
+          <div class="c-head"><span><b>Today’s room</b><span class="a-label" data-cd-words>8H 33M left</span></span><span class="here">4 here</span></div>
+          <div class="chat-body">
+            <div class="m" data-wait="500"><div class="mi"><div class="msg"><img class="ava" src="avatars/sherlock.svg" alt=""><div class="col"><span class="who">Sherlock</span><div class="bubble">who’s still up</div></div></div></div></div>
+            <div class="m" data-wait="1300"><div class="mi"><div class="msg"><img class="ava" src="avatars/nemo.svg" alt=""><div class="col"><span class="who">Nemo</span><div class="bubble">always</div><span class="react">😂 3</span></div></div></div></div>
+            <div class="m" data-wait="1500"><div class="mi"><div class="msg out"><div class="col"><div class="bubble">library 4th floor rn</div></div></div></div></div>
+            <div class="m" data-wait="1600"><div class="mi"><div class="msg"><img class="ava" src="avatars/wednesday.svg" alt=""><div class="col"><span class="who">Wednesday</span><div class="pollc"><span class="q">Food run?</span><span class="opt" data-v="67" data-n="4"><span>Waffles</span><span class="pct">4</span></span><span class="opt" data-v="33" data-n="2"><span>Tacos</span><span class="pct">2</span></span></div></div></div></div></div>
+            <div class="m" data-wait="2200"><div class="mi"><div class="msg"><img class="ava" src="avatars/loki.svg" alt=""><div class="col"><span class="who">Loki</span><div class="gamec"><span class="gi">🎱</span>8-Ball Pool<span class="go">Play</span></div></div></div></div></div>
+            <div class="m typing" data-wait="1400"><div class="mi"><div class="msg"><img class="ava" src="avatars/nemo.svg" alt=""><div class="col"><span class="who">Nemo</span><div class="bubble typing-dots" aria-label="Nemo is typing"><i></i><i></i><i></i></div></div></div></div></div>
+            <div class="m" data-wait="200"><div class="mi"><div class="msg"><img class="ava" src="avatars/nemo.svg" alt=""><div class="col"><span class="who">Nemo</span><div class="bubble">omw</div></div></div></div></div>
+          </div>
+          <div class="a-composer"><span class="in">Message</span><span class="send"><svg class="ic"><use href="#i-arr"/></svg></span></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. FEATURES ============ -->
+<section id="features" aria-labelledby="features-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="label" data-reveal>Features</p>
+      <h2 class="h2" id="features-title" data-reveal>Everything a room needs.</h2>
+    </div>
+
+    <div class="bento" data-stagger>
+      <article class="card card-hover span-4 match">
+        <div class="txt">
+          <p class="label gold">The midnight match</p>
+          <h3 class="h3">A new hand, every night.</h3>
+          <p>New members, dealt in like cards.</p>
+        </div>
+        <div class="fan" aria-hidden="true">
+          <div class="mc"><img class="ava" src="avatars/sherlock.svg" alt=""><span>Sherlock</span></div>
+          <div class="mc"><img class="ava" src="avatars/wednesday.svg" alt=""><span>Wednesday</span></div>
+          <div class="mc gold"><img class="ava" src="avatars/maverick.svg" alt=""><span>You</span></div>
+          <div class="mc"><img class="ava" src="avatars/nemo.svg" alt=""><span>Nemo</span></div>
+          <div class="mc"><img class="ava" src="avatars/loki.svg" alt=""><span>Loki</span></div>
+        </div>
+        <p class="deal-note">+5 more strangers · dealt at 12:00 AM</p>
+      </article>
+
+      <article class="card card-hover span-2">
+        <div class="txt">
+          <p class="label gold">Games</p>
+          <h3 class="h3">Play the room.</h3>
+        </div>
+        <ul class="games">
+          <li><span class="g"><span class="ge">🎱</span>8-ball pool</span></li>
+          <li><span class="g"><span class="ge">♟️</span>Chess</span></li>
+          <li><span class="g"><span class="ge">🎯</span>Darts</span></li>
+          <li><span class="g"><span class="ge">🏀</span>Basketball</span></li>
+          <li><span class="g"><span class="ge">🚢</span>Sea Battle</span></li>
+        </ul>
+      </article>
+
+      <article class="card card-hover span-2">
+        <div class="txt">
+          <p class="label gold">Rich chat</p>
+          <h3 class="h3">A real group chat.</h3>
+        </div>
+        <div style="display:grid;gap:18px">
+          <div class="voice" aria-hidden="true"><span class="play"></span><span class="wave"><i style="--h:8px"></i><i style="--h:14px"></i><i style="--h:20px"></i><i style="--h:11px"></i><i style="--h:17px"></i><i style="--h:22px"></i><i style="--h:9px"></i><i style="--h:15px"></i><i style="--h:19px"></i><i style="--h:7px"></i><i style="--h:13px"></i><i style="--h:18px"></i><i style="--h:10px"></i><i style="--h:6px"></i></span><span class="t">0:12</span></div>
+          <div class="chips"><span class="chip">Replies</span><span class="chip">Reactions</span><span class="chip">@mentions</span><span class="chip">Photos</span><span class="chip">Voice</span><span class="chip">Polls</span><span class="chip">Daily drop</span></div>
+        </div>
+      </article>
+
+      <article class="card card-hover span-4">
+        <div class="bridge-grid">
+          <div class="txt">
+            <p class="label gold">The bridge</p>
+            <h3 class="h3">From anonymous to an actual friend.</h3>
+            <ul class="ticks"><li>Share your number privately</li><li>2 people a day, free</li><li>The one thing that outlives the room</li></ul>
+          </div>
+          <div class="bridge" aria-hidden="true">
+            <div class="top"><img class="ava" src="avatars/sherlock.svg" alt="" style="width:40px;height:40px"><span><b>Send your number to Sherlock?</b><span>Only Sherlock will see it.</span></span></div>
+            <div class="row"><span class="label">2 of 2 left today</span><span class="btn btn-gold btn-sm" style="pointer-events:none">Send <span class="arr">↗</span></span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card card-hover span-3">
+        <div class="txt">
+          <p class="label gold">Check-ins &amp; streaks</p>
+          <h3 class="h3">How’s today going?</h3>
+          <p>Daily mood check-in. Daily streaks.</p>
+        </div>
+        <div style="display:grid;gap:18px">
+          <div class="chips"><span class="chip">Cooked</span><span class="chip" style="border-color:var(--accent);color:var(--text);background:var(--accent-surface)">Locked in</span><span class="chip">Delusional</span><span class="chip">Chilling</span></div>
+          <div class="streak"><span class="av">🔥</span><span><b>Day 12</b> <span style="color:var(--text-3)">· daily streak</span></span></div>
+          <div class="week" aria-hidden="true"><span class="done"><i>🔥</i>M</span><span class="done"><i>🔥</i>T</span><span class="done"><i>🔥</i>W</span><span class="done"><i>🔥</i>T</span><span class="today"><i>🔒</i>F</span><span class=""><i></i>S</span><span class=""><i></i>S</span></div>
+        </div>
+      </article>
+
+      <article class="card card-hover span-3">
+        <div class="txt">
+          <p class="label gold">Notifications</p>
+          <h3 class="h3">The midnight ping.</h3>
+          <p>Matches, mentions, messages.</p>
+        </div>
+        <div class="notifs" aria-hidden="true">
+          <div class="notif"><span class="ic"><span>K</span></span><span class="txt-n"><b>New room</b><span>Your strangers just arrived. Say hi.</span></span><span class="when">now</span></div>
+          <div class="notif"><span class="ic"><span>K</span></span><span class="txt-n"><b>Nemo mentioned you</b><span>@Maverick ok who’s getting boba after this</span></span><span class="when">2m</span></div>
+          <div class="notif"><span class="ic"><span>K</span></span><span class="txt-n"><b>Today’s room</b><span>6 new messages</span></span><span class="when">9m</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. SAFETY ============ -->
+<section id="safety" aria-labelledby="safety-title">
+  <div class="wrap safety-grid">
+    <div class="section-head">
+      <p class="label" data-reveal>Safety &amp; trust</p>
+      <h2 class="h2" id="safety-title" data-reveal>Anonymous, not&nbsp;lawless.</h2>
+      <p class="lede" data-reveal>Every account is a verified school email. The room only sees an alias.</p>
+    </div>
+
+    <ul class="card rules" data-stagger>
+      <li><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.3 7.5 9.5 4.4-1.2 7.5-4.9 7.5-9.5V6L12 3z"/><path d="m9 12 2 2 4-4"/></svg></span><div><b>Verified campus</b><p>@gatech.edu only</p></div></li>
+      <li><span class="ico"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M9 11h7M9 15h7M9 7h3"/></svg></span><div><b>Community Rules</b><p>Short, clear, enforced</p></div></li>
+      <li><span class="ico"><svg viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/></svg></span><div><b>Report &amp; block</b><p>Right from the chat</p></div></li>
+      <li><span class="ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.2c2.8 0 5 2.2 5 5"/></svg></span><div><b>Moderator team</b><p>Reviews reports, suspends rule-breakers</p></div></li>
+      <li><span class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span><div><b>Limited data retention</b><p>Messages gone at midnight. Media deleted on a schedule.</p></div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 7. BUSINESS MODEL ============ -->
+<section id="business" aria-labelledby="business-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="label" data-reveal>Business model</p>
+      <h2 class="h2" id="business-title" data-reveal>Free to talk. Fun to flex.</h2>
+      <p class="lede" data-reveal>Free to use. Two optional App Store subscriptions.</p>
+    </div>
+
+    <div class="biz-grid">
+      <div class="biz-phone" data-reveal>
+        <div class="phone"><div class="phone-screen">
+          <div class="island"></div>
+          <div class="statusbar"><span>9:41</span><span class="sb-icons"><svg viewBox="0 0 18 11"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" y="0" width="3" height="11" rx="1"/></svg><svg viewBox="0 0 25 11"><rect x=".5" y=".5" width="21" height="10" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="16" height="7" rx="1.6"/><rect x="22.6" y="3.6" width="1.6" height="3.8" rx=".8" opacity=".4"/></svg></span></div>
+          <div class="screen app prem">
+            <span class="pm-k"><span>K</span></span>
+            <p class="a-label">Kublai Premium</p>
+            <p class="pm-title">Go further.</p>
+            <div class="pm-plans">
+              <div class="pm-plan gd on"><b>God Mode</b><small>Alias, themes, effects</small><span class="pp">$1.99/mo</span></div>
+              <div class="pm-plan kb"><b>Kublai Mode</b><small>Outranks all. Plus a shirt.</small><span class="pp">$99.99/mo</span></div>
+            </div>
+            <ul class="pm-perks">
+              <li><svg class="ic"><use href="#i-check"/></svg>Pick your alias</li>
+              <li><svg class="ic"><use href="#i-check"/></svg>Themes &amp; message effects</li>
+              <li><svg class="ic"><use href="#i-check"/></svg>Unlimited numbers &amp; drops</li>
+            </ul>
+            <div class="a-btn">Continue <svg class="ic"><use href="#i-go"/></svg></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="plans" data-stagger>
+        <article class="plan god">
+          <div class="top"><span class="pname">God Mode</span><span class="badge">For the regulars</span></div>
+          <div class="price"><b>$1.99</b><span>/ month</span></div>
+          <ul>
+            <li><svg viewBox="0 0 14 14"><path d="m2 7.5 3 3 7-7"/></svg>Pick your alias and profile colour</li>
+            <li><svg viewBox="0 0 14 14"><path d="m2 7.5 3 3 7-7"/></svg>Chat themes, message effects, extra reactions</li>
+            <li><svg viewBox="0 0 14 14"><path d="m2 7.5 3 3 7-7"/></svg>Chat stats and streaks</li>
+            <li><svg viewBox="0 0 14 14"><path d="m2 7.5 3 3 7-7"/></svg>A badge and an alternate app icon</li>
+            <li><svg viewBox="0 0 14 14"><path d="m2 7.5 3 3 7-7"/></svg>Early access and unlimited daily drops</li>
+            <li><svg viewBox="0 0 14 14"><path d="m2 7.5 3 3 7-7"/></svg>Send your number to anyone</li>
+          </ul>
+        </article>
+        <article class="plan kublai">
+          <div class="top"><span class="pname">Kublai Mode</span><span class="badge">Outranks all</span></div>
+          <div class="price"><b>$99.99</b><span>/ month</span></div>
+          <ul>
+            <li><svg viewBox="0 0 14 14"><path d="m2 7.5 3 3 7-7"/></svg>Everything in God Mode</li>
+            <li><svg viewBox="0 0 14 14"><path d="m2 7.5 3 3 7-7"/></svg>The Kublai badge, which outranks every other badge</li>
+            <li><svg viewBox="0 0 14 14"><path d="m2 7.5 3 3 7-7"/></svg>A free Kublai Khan shirt, shipped to you</li>
+          </ul>
+          <p class="tagline">Deliberately absurd. Very high margin.</p>
+        </article>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 8. WHY NOW / GTM ============ -->
+<section id="why" aria-labelledby="why-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="label" data-reveal>Why now</p>
+      <h2 class="h2" id="why-title" data-reveal>Students want to talk. Just not on the record.</h2>
+    </div>
+
+    <div class="why" data-stagger>
+      <div><span class="label">01</span><h3 class="h3">Feeds got permanent.</h3><p>So students post less.</p></div>
+      <div><span class="label">02</span><h3 class="h3">Ephemeral is native.</h3><p>Disappearing messages taught people to open up.</p></div>
+      <div><span class="label">03</span><h3 class="h3">Verified, yet anonymous.</h3><p>A school email gate makes anonymity safe.</p></div>
+    </div>
+
+
+    <div class="gtm">
+      <div class="gtm-head">
+        <p class="label" data-reveal>Go-to-market</p>
+        <h3 class="h2" style="font-size:clamp(2.1rem,4vw,3.2rem)" data-reveal>One campus at a time.</h3>
+        <p class="body" data-reveal>Win density at one school, then open the next.</p>
+      </div>
+      <div class="track" data-reveal>
+        <span class="line-fill" aria-hidden="true"></span>
+        <div class="stop now"><span class="label gold">First</span><h4 class="h3">Georgia Tech</h4><p>Launch campus</p></div>
+        <div class="stop"><span class="label">Next</span><h4 class="h3">University of Georgia</h4><p>Opens once Georgia Tech rooms fill nightly</p></div>
+        <div class="stop"><span class="label">Then</span><h4 class="h3">Campus by campus</h4><p>Each school its own closed network</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 9. TEAM / RAISE ============ -->
+<section id="raise" aria-labelledby="raise-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="label" data-reveal>Team &amp; the raise</p>
+      <h2 class="h2" id="raise-title" data-reveal>The team and the ask.</h2>
+    </div>
+
+    <div class="tr-grid" data-stagger>
+      <div class="card team">
+        <div class="card-head"><span class="label">Founders</span></div>
+        <div class="founder"><span class="pic initials" aria-hidden="true">PC</span><span class="who-f"><b class="fname">Prajit Chennupati</b><span class="frole">CEO · Computer Science</span></span></div>
+        <div class="founder"><span class="pic initials" aria-hidden="true">VS</span><span class="who-f"><b class="fname">Vedanth Sreeprakash</b><span class="frole">CTO · Math &amp; Computer Science</span></span></div>
+        <div class="founder"><span class="pic initials" aria-hidden="true">SB</span><span class="who-f"><b class="fname">Shrianz Bambi</b><span class="frole">COO · Electrical Engineering</span></span></div>
+      </div>
+      <div class="card raise">
+        <div class="card-head"><span class="label gold">The raise</span></div>
+        <p class="big">Raising <em class="gold">$15,000</em></p>
+        <dl>
+          <div><dt>Round</dt><dd>Pre-seed</dd></div>
+          <div><dt>Use of funds</dt><dd>Marketing at Georgia Tech and UGA</dd></div>
+          <div><dt>Milestones</dt><dd><ol class="miles">
+            <li>Full rooms nightly at Georgia Tech</li>
+            <li>Strong daily retention</li>
+            <li>Launch at UGA</li>
+          </ol></dd></div>
+        </dl>
+        <div class="btns"><a href="#contact" class="btn btn-gold">Get in touch <span class="arr" aria-hidden="true">↗</span></a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10. CONTACT ============ -->
+<section id="contact" class="contact" aria-labelledby="contact-title">
+  <div class="wrap inner">
+    <span class="mini-cd" data-reveal><span class="label">Today’s room closes in</span><b data-cd-hms>23:15:00</b></span>
+    <h2 class="display" id="contact-title" data-reveal>Let’s talk before <em class="gold">midnight.</em></h2>
+    <p class="lede" data-reveal>Our chats delete themselves. Our inbox doesn’t.</p>
+    <div class="btns" data-reveal>
+      <a href="mailto:founders@kublai.app" class="btn btn-gold">Email the founders <span class="arr" aria-hidden="true">↗</span></a>
+    </div>
+    <p class="addr" data-reveal>
+      <span>Founders: <a href="mailto:founders@kublai.app">founders@kublai.app</a></span>
+      <span>Support: <a href="mailto:support@kublai.app">support@kublai.app</a></span>
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="wordmark"><span class="k">K</span>ublai</span>
+    <span class="meta">
+      <span class="label">Georgia Tech only, for now</span>
+      <span class="label">© <span data-year>2026</span> Kublai</span>
+    </span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+
+  /* ---- Theme toggle ---- */
+  var sysLight = window.matchMedia('(prefers-color-scheme: light)');
+  var toggle = $('.theme-toggle');
+  function currentTheme() { return root.getAttribute('data-theme') || (sysLight.matches ? 'light' : 'dark'); }
+  function labelToggle() { toggle.setAttribute('aria-label', currentTheme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'); }
+  toggle.addEventListener('click', function () {
+    var next = currentTheme() === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('kublai-theme', next); } catch (e) {}
+    labelToggle();
+  });
+  if (sysLight.addEventListener) sysLight.addEventListener('change', labelToggle);
+  labelToggle();
+
+  /* ---- Nav background on scroll ---- */
+  var nav = $('#nav');
+  function onScroll() { nav.classList.toggle('scrolled', window.scrollY > 8); }
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  /* ---- Nav: mark the section in view ---- */
+  var navLinks = $$('.nav-links a');
+  var navFor = { how: '#how', room: '#how', features: '#how', safety: '#how', business: '#business', why: '#why', raise: '#raise' };
+  if ('IntersectionObserver' in window) {
+    var nio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var href = navFor[e.target.id] || '';
+        navLinks.forEach(function (a) { a.classList.toggle('on', a.getAttribute('href') === href); });
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    $$('main > section').forEach(function (el) { nio.observe(el); });
+  }
+
+  /* ---- How it works: build the sticky phone from each step's screen ---- */
+  var steps = $$('.step');
+  var stage = $('.how-stage .screens');
+  var bars = $$('.how-progress i');
+  var stageScreens = steps.map(function (st) {
+    var sc = $('.screen', st).cloneNode(true);
+    stage.appendChild(sc);
+    return sc;
+  });
+  function activate(i) {
+    steps.forEach(function (s, j) { s.classList.toggle('is-active', j === i); });
+    stageScreens.forEach(function (s, j) { s.classList.toggle('is-active', j === i); });
+    bars.forEach(function (b, j) { b.classList.toggle('on', j === i); });
+  }
+  activate(0);
+
+  /* ---- Countdown to next midnight, US Eastern ---- */
+  var fmt = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hourCycle: 'h23', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+  var cdEls = $$('[data-cd]'), appEls = $$('[data-cd-app]'), wordEls = $$('[data-cd-words]'), hmsEls = $$('[data-cd-hms]'), barEls = $$('[data-cd-bar]');
+  function tick() {
+    var p = {};
+    fmt.formatToParts(new Date()).forEach(function (x) { p[x.type] = parseInt(x.value, 10) || 0; });
+    var left = 86400 - ((p.hour % 24) * 3600 + p.minute * 60 + p.second);
+    var hm = pad(Math.floor(left / 3600)) + ':' + pad(Math.floor((left % 3600) / 60));
+    var frac = left / 86400;
+    cdEls.forEach(function (el) { if (el.textContent !== hm) el.textContent = hm; });
+    var h = Math.floor(left / 3600), mn = Math.floor((left % 3600) / 60);
+    appEls.forEach(function (el) { el.textContent = h + ':' + pad(mn); });
+    wordEls.forEach(function (el) { el.textContent = h + 'H ' + mn + 'M left'; });
+    hmsEls.forEach(function (el) { el.textContent = hm + ':' + pad(left % 60); });
+    barEls.forEach(function (el) { el.style.setProperty('--p', frac.toFixed(5)); });
+  }
+  tick();
+  setTimeout(function () { tick(); setInterval(tick, 1000); }, 1000 - (Date.now() % 1000));
+  var yr = $('[data-year]'); if (yr) yr.textContent = new Date().getFullYear();
+
+  /* ---- Phone screens: scale the 402px-wide app layout to each phone ---- */
+  var fitScreen = function (ps) { if (ps.clientWidth) ps.style.setProperty('--k', (ps.clientWidth / 402).toFixed(4)); };
+  var phoneScreens = $$('.phone-screen');
+  phoneScreens.forEach(fitScreen);
+  if ('ResizeObserver' in window) {
+    var ro = new ResizeObserver(function (es) { es.forEach(function (e) { fitScreen(e.target); }); });
+    phoneScreens.forEach(function (ps) { ro.observe(ps); });
+  }
+
+  /* ---- Sign-up screen: the email types itself in each time the screen shows ---- */
+  $$('.typed[data-type]').forEach(function (t) {
+    var sc = t.closest('.screen'), field = t.closest('.a-field'), word = t.getAttribute('data-type'), timer;
+    function run() {
+      clearInterval(timer); t.textContent = ''; field.classList.remove('typing');
+      if (!sc.classList.contains('is-active')) return;
+      if (reduce) { t.textContent = word; field.classList.add('typing'); return; }
+      var n = 0;
+      timer = setTimeout(function () {
+        field.classList.add('typing');
+        timer = setInterval(function () { t.textContent = word.slice(0, ++n); if (n >= word.length) clearInterval(timer); }, 110);
+      }, 700);
+    }
+    new MutationObserver(run).observe(sc, { attributes: true, attributeFilter: ['class'] });
+    run();
+  });
+
+  /* ---- Scroll reveals ---- */
+  var heroEls = $$('[data-hero]');
+  if (!('IntersectionObserver' in window)) {
+    $$('[data-reveal],[data-stagger],.track').forEach(function (el) { el.classList.add('in'); });
+    $$('.screen').forEach(function (el) { el.classList.add('is-active'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0 });
+  $$('[data-reveal],[data-stagger]').forEach(function (el) { if (!el.hasAttribute('data-hero')) io.observe(el); });
+
+  // Hero waits briefly for webfonts so the first frame is already in its final typeface.
+  var fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+  Promise.race([fontsReady, new Promise(function (r) { setTimeout(r, 700); })]).then(function () {
+    requestAnimationFrame(function () { heroEls.forEach(function (el) { el.classList.add('in'); }); });
+  });
+
+  /* ---- Step tracking (desktop sticky phone) ---- */
+  var sio = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) activate(steps.indexOf(e.target)); });
+  }, { rootMargin: '-45% 0px -45% 0px' });
+  steps.forEach(function (s) { sio.observe(s); });
+
+  // Mobile: each step's own phone animates when it scrolls into view.
+  var mio = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-active'); mio.unobserve(e.target); } });
+  }, { threshold: 0.3 });
+  $$('.step-media .screen').forEach(function (s) { mio.observe(s); });
+
+  /* ---- Live chat sequence ---- */
+  var chat = $('.chat-body');
+  if (!chat) return;
+  var items = $$('.m', chat);
+  var visible = false, waiters = [];
+  new IntersectionObserver(function (es) {
+    visible = es[0].isIntersecting;
+    if (visible) { waiters.forEach(function (r) { r(); }); waiters = []; }
+  }, { threshold: 0.25 }).observe(chat);
+  var whenVisible = function () { return visible ? Promise.resolve() : new Promise(function (r) { waiters.push(r); }); };
+  var sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+  var wait = function (ms) { return sleep(ms).then(whenVisible); };
+
+  function fillPoll(m, instant) {
+    $$('.opt', m).forEach(function (o) {
+      var target = +o.getAttribute('data-v'), votes = +o.getAttribute('data-n'), pct = $('.pct', o);
+      o.style.setProperty('--w', target + '%');
+      if (instant) { pct.textContent = votes; return; }
+      var t0 = performance.now();
+      (function step(t) {
+        var k = Math.min(1, (t - t0) / 1300), e = 1 - Math.pow(1 - k, 3);
+        pct.textContent = Math.round(votes * e);
+        if (k < 1) requestAnimationFrame(step);
+      })(t0);
+    });
+  }
+  function resetChat() {
+    chat.classList.add('no-anim');
+    items.forEach(function (m) {
+      m.classList.remove('show', 'reacted');
+      $$('.opt', m).forEach(function (o) { o.style.setProperty('--w', '0%'); $('.pct', o).textContent = '0'; });
+    });
+    void chat.offsetHeight;
+    chat.classList.remove('no-anim');
+  }
+
+  if (reduce) {
+    items.forEach(function (m) {
+      if (m.classList.contains('typing')) return;
+      m.classList.add('show', 'reacted');
+      fillPoll(m, true);
+    });
+    return;
+  }
+
+  resetChat();
+  (async function run() {
+    await whenVisible();
+    await sleep(400);
+    for (;;) {
+      for (var i = 0; i < items.length; i++) {
+        var m = items[i];
+        await wait(+m.getAttribute('data-wait') || 1200);
+        m.classList.add('show');
+        if (m.classList.contains('typing')) { await sleep(1700); m.classList.remove('show'); await sleep(350); continue; }
+        if ($('.opt', m)) { await sleep(450); fillPoll(m); }
+        if ($('.react', m)) (function (mm) { setTimeout(function () { mm.classList.add('reacted'); }, 1000); })(m);
+      }
+      await wait(5500);
+      chat.classList.add('fading');
+      await sleep(700);
+      resetChat();
+      await sleep(120);
+      chat.classList.remove('fading');
+      await sleep(300);
+    }
+  })();
+})();
+</script>
+</body>
+</html>
