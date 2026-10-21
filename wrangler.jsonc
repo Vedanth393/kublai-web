@@ -1,0 +1,9 @@
+// Cloudflare Worker serving the static site. `node build.mjs` copies the site into dist/ first,
+// so only the site's own files are published (never .git).
+// "name" must match the Worker's name in the Cloudflare dashboard.
+{
+  "name": "kublai",
+  "compatibility_date": "2026-10-01",
+  "build": { "command": "node build.mjs" },
+  "assets": { "directory": "./dist" }
+}
